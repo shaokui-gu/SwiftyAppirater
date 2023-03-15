@@ -29,49 +29,51 @@ let kAppiraterRatedCurrentVersion = "kAppiraterRatedCurrentVersion"
 let kAppiraterDeclinedToRate = "kAppiraterDeclinedToRate"
 let kAppiraterReminderRequestDate = "kAppiraterReminderRequestDate";
 
-
-/*!
- Your localized app's name.
- */
-let APPIRATER_LOCALIZED_APP_NAME = Bundle.main.localizedInfoDictionary?["CFBundleDisplayName"] as? String
-
-/*!
- Your app's name.
- */
-let APPIRATER_APP_NAME = APPIRATER_LOCALIZED_APP_NAME ?? (Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String) ?? (Bundle.main.infoDictionary!["CFBundleName"] as! String)
-
-/*!
- This is the message your users will see once they've passed the day+launches
- threshold.
- */
-
-let APPIRATER_LOCALIZED_MESSAGE = NSLocalizedString("If you enjoy using %@, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
-
-let APPIRATER_MESSAGE = String(format: APPIRATER_LOCALIZED_MESSAGE, APPIRATER_APP_NAME)
-
-/*!
- This is the title of the message alert that users will see.
- */
-let APPIRATER_LOCALIZED_MESSAGE_TITLE = NSLocalizedString("Rate %@", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
-
-let APPIRATER_MESSAGE_TITLE =  String(format: APPIRATER_LOCALIZED_MESSAGE_TITLE, APPIRATER_APP_NAME)
-
-/*!
- The text of the button that rejects reviewing the app.
- */
-let APPIRATER_CANCEL_BUTTON = NSLocalizedString("No, Thanks", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
-/*!
- Text of button that will send user to app review page.
- */
-let APPIRATER_LOCALIZED_RATE_BUTTON = NSLocalizedString("Rate %@", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
-let APPIRATER_RATE_BUTTON = String(format: APPIRATER_LOCALIZED_RATE_BUTTON, APPIRATER_APP_NAME)
-
-/*!
- Text for button to remind the user to review later.
- */
-let APPIRATER_RATE_LATER = NSLocalizedString("Remind me later", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
-
 public class SwiftyAppirater : NSObject {
+    
+    
+    /*!
+     Your localized app's name.
+     */
+    lazy var APPIRATER_LOCALIZED_APP_NAME = Bundle.main.localizedInfoDictionary?["CFBundleDisplayName"] as? String
+
+    /*!
+     Your app's name.
+     */
+    lazy var APPIRATER_APP_NAME = APPIRATER_LOCALIZED_APP_NAME ?? (Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String) ?? (Bundle.main.infoDictionary!["CFBundleName"] as! String)
+
+    /*!
+     This is the message your users will see once they've passed the day+launches
+     threshold.
+     */
+
+    lazy var APPIRATER_LOCALIZED_MESSAGE = NSLocalizedString("If you enjoy using %@, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
+
+    lazy var APPIRATER_MESSAGE = String(format: APPIRATER_LOCALIZED_MESSAGE, APPIRATER_APP_NAME)
+
+    /*!
+     This is the title of the message alert that users will see.
+     */
+    lazy var APPIRATER_LOCALIZED_MESSAGE_TITLE = NSLocalizedString("Rate %@", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
+
+    lazy var APPIRATER_MESSAGE_TITLE =  String(format: APPIRATER_LOCALIZED_MESSAGE_TITLE, APPIRATER_APP_NAME)
+
+    /*!
+     The text of the button that rejects reviewing the app.
+     */
+    lazy var APPIRATER_CANCEL_BUTTON = NSLocalizedString("No, Thanks", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
+    /*!
+     Text of button that will send user to app review page.
+     */
+    lazy var APPIRATER_LOCALIZED_RATE_BUTTON = NSLocalizedString("Rate %@", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
+    lazy var APPIRATER_RATE_BUTTON = String(format: APPIRATER_LOCALIZED_RATE_BUTTON, APPIRATER_APP_NAME)
+
+    /*!
+     Text for button to remind the user to review later.
+     */
+    lazy var APPIRATER_RATE_LATER = NSLocalizedString("Remind me later", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
+
+    
     
     public var appId:String = ""
     public var daysUntilPrompt:Double = 30
@@ -85,12 +87,55 @@ public class SwiftyAppirater : NSObject {
     public var alwaysUseMainBundle:Bool = false
     private var eventQueue:OperationQueue?
     
-    public var alertTitle:String = APPIRATER_MESSAGE_TITLE
-    public var alertMessage:String = APPIRATER_MESSAGE
-    public var alertCancelTitle:String = APPIRATER_CANCEL_BUTTON
-    public var alertRateTitle:String = APPIRATER_RATE_BUTTON
-    public var alertRateLaterTitle:String = APPIRATER_RATE_LATER
-    private let reachability:Reachability
+    private var _alertTitle:String?
+    private var _alertMessage:String?
+    private var _alertCancelTitle:String?
+    private var _alertRateTitle:String?
+    private var _alertRateLaterTitle:String?
+
+    
+    public var alertTitle:String {
+        set {
+            _alertTitle = newValue
+        }
+        get {
+            return _alertTitle ?? APPIRATER_MESSAGE_TITLE
+        }
+    }
+    public var alertMessage:String {
+        set {
+            _alertMessage = newValue
+        }
+        get {
+            return _alertMessage ?? APPIRATER_MESSAGE
+        }
+    }
+    public var alertCancelTitle:String {
+        set {
+            _alertCancelTitle = newValue
+        }
+        get {
+            return _alertCancelTitle ?? APPIRATER_CANCEL_BUTTON
+        }
+    }
+    public var alertRateTitle:String {
+        set {
+            _alertRateTitle = newValue
+        }
+        get {
+          return _alertRateTitle ?? APPIRATER_RATE_BUTTON
+        }
+    }
+    public var alertRateLaterTitle:String {
+        set {
+            _alertRateTitle = newValue
+        }
+        get {
+           return _alertRateLaterTitle ??  APPIRATER_RATE_LATER
+        }
+    }
+    
+    private let reachability:Reachability?
     
     public var ratingAlert:UIAlertController?
     public var openInAppStore:Bool = true
@@ -115,7 +160,8 @@ public class SwiftyAppirater : NSObject {
     public static let instance = SwiftyAppirater()
     
     private override init() {
-        reachability = try! Reachability.init(hostname: "https://www.apple.com")
+        reachability = try? Reachability(hostname: "https://www.apple.com")
+        try? reachability?.startNotifier()
         eventQueue = OperationQueue()
         eventQueue!.maxConcurrentOperationCount = 1
         super.init()
@@ -134,7 +180,10 @@ public class SwiftyAppirater : NSObject {
     }
     
     func connectedToNetwork() -> Bool {
-        return reachability.connection != .unavailable
+        guard reachability != nil else {
+            return false
+        }
+        return reachability?.connection != .unavailable
     }
 }
 

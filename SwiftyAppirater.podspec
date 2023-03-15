@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SwiftyAppirater"
-  s.version      = "0.0.4"
+  s.version      = "0.0.5"
   s.summary      = "SwiftyAppirater use swift"
   s.homepage     = "https://github.com/shaokui-gu/Swiftyirater"
   s.license      = 'MIT'
