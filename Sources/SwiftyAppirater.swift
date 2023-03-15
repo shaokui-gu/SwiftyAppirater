@@ -11,7 +11,7 @@ import UIKit
 import SystemConfiguration
 import Reachability
 
-@objc protocol SwiftyAppiraterDelegate {
+@objc public protocol SwiftyAppiraterDelegate {
     func appiraterShouldDisplayAlert(_ irater:SwiftyAppirater) -> Bool
     func appiraterDidDisplayAlert(_ irater:SwiftyAppirater)
     func appiraterDidDeclineToRate(_ irater:SwiftyAppirater)
@@ -71,33 +71,32 @@ let APPIRATER_RATE_BUTTON = String(format: APPIRATER_LOCALIZED_RATE_BUTTON, APPI
  */
 let APPIRATER_RATE_LATER = NSLocalizedString("Remind me later", tableName:"AppiraterLocalizable", bundle:SwiftyAppirater.instance.bundle, comment: "")
 
-open class SwiftyAppirater : NSObject {
+public class SwiftyAppirater : NSObject {
     
-    private var appId:String = ""
-    private var daysUntilPrompt:Double = 30
-    private var usesUntilPrompt:Int = 20
-    private var significantEventsUntilPrompt:Int = -1
-    private var timeBeforeReminding:Double = 1
-    var debug:Bool = false
-    private var usesAnimation = true
+    public var appId:String = ""
+    public var daysUntilPrompt:Double = 30
+    public var usesUntilPrompt:Int = 20
+    public var significantEventsUntilPrompt:Int = -1
+    public var timeBeforeReminding:Double = 1
+    public var debug:Bool = false
+    public var usesAnimation = true
     private var statusBarStyle:UIStatusBarStyle = .default
     private var modalOpen:Bool = false
-    private var alwaysUseMainBundle:Bool = false
+    public var alwaysUseMainBundle:Bool = false
     private var eventQueue:OperationQueue?
     
-    private var alertTitle:String = APPIRATER_MESSAGE_TITLE
-    private var alertMessage:String = APPIRATER_MESSAGE
-    private var alertCancelTitle:String = APPIRATER_CANCEL_BUTTON
-    private var alertRateTitle:String = APPIRATER_RATE_BUTTON
-    private var alertRateLaterTitle:String = APPIRATER_RATE_LATER
+    public var alertTitle:String = APPIRATER_MESSAGE_TITLE
+    public var alertMessage:String = APPIRATER_MESSAGE
+    public var alertCancelTitle:String = APPIRATER_CANCEL_BUTTON
+    public var alertRateTitle:String = APPIRATER_RATE_BUTTON
+    public var alertRateLaterTitle:String = APPIRATER_RATE_LATER
     private let reachability:Reachability
     
-    var ratingAlert:UIAlertController?
-    var openInAppStore:Bool = true
-
-    weak var delegate:SwiftyAppiraterDelegate?
+    public var ratingAlert:UIAlertController?
+    public var openInAppStore:Bool = true
+    public weak var delegate:SwiftyAppiraterDelegate?
     
-    lazy var bundle:Bundle = {
+    public lazy var bundle:Bundle = {
         let bundle:Bundle
         if (alwaysUseMainBundle) {
             bundle = Bundle.main
@@ -320,11 +319,11 @@ extension SwiftyAppirater {
         }
     }
     
-    func userHasDeclinedToRate() -> Bool {
+    public func userHasDeclinedToRate() -> Bool {
         return UserDefaults.standard.bool(forKey: kAppiraterDeclinedToRate)
     }
     
-    func userHasRatedCurrentVersion()  -> Bool {
+    public func userHasRatedCurrentVersion()  -> Bool {
         return UserDefaults.standard.bool(forKey: kAppiraterRatedCurrentVersion)
     }
     
@@ -332,7 +331,7 @@ extension SwiftyAppirater {
         self.appLaunched(true)
     }
     
-    func appLaunched(_ canPromptForRating:Bool) {
+    public func appLaunched(_ canPromptForRating:Bool) {
         DispatchQueue.global().async {
             let appirater = SwiftyAppirater.instance
             if appirater.debug {
@@ -363,13 +362,13 @@ extension SwiftyAppirater {
        SwiftyAppirater.instance.hideRatingAlert()
     }
     
-    func appEnteredForeground(_ canPromptForRating:Bool) {
+    public func appEnteredForeground(_ canPromptForRating:Bool) {
         eventQueue?.addOperation({
             SwiftyAppirater.instance.incrementAndRate(canPromptForRating)
         })
     }
     
-    func userDidSignificantEvent(_ canPromptForRating:Bool) {
+    public func userDidSignificantEvent(_ canPromptForRating:Bool) {
         eventQueue?.addOperation({
             SwiftyAppirater.instance.incrementSignificantEventAndRate(canPromptForRating)
         })
@@ -379,11 +378,11 @@ extension SwiftyAppirater {
         self.tryToShowPrompt()
     }
     
-    func tryToShowPrompt() {
+    public func tryToShowPrompt() {
         self.showPromptWithChecks(true, displayRateLaterButton:true)
     }
     
-    func forceShowPrompt(_ displayRateLaterButton:Bool) {
+    public func forceShowPrompt(_ displayRateLaterButton:Bool) {
         self.showPromptWithChecks(false, displayRateLaterButton:displayRateLaterButton)
     }
     
@@ -435,7 +434,7 @@ extension SwiftyAppirater {
         return newVc
     }
     
-    func rateApp() {
+    public func rateApp() {
         let userDefaults = UserDefaults.standard
         userDefaults.setValue(true, forKey: kAppiraterRatedCurrentVersion)
         userDefaults.synchronize()
@@ -451,7 +450,7 @@ extension SwiftyAppirater : SKStoreProductViewControllerDelegate {
     
     
     //Close the in-app rating (StoreKit) view and restore the previous status bar style.
-    func closeModal() {
+    public func closeModal() {
         if modalOpen {
             self.modalOpen = false
             // get the top most controller (= the StoreKit Controller) and dismiss it
