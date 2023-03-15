@@ -112,7 +112,7 @@ public class SwiftyAppirater : NSObject {
         return bundle;
     }()
     
-    static let instance = SwiftyAppirater()
+    public static let instance = SwiftyAppirater()
     
     private override init() {
         reachability = try! Reachability.init(hostname: "https://www.apple.com")
@@ -127,7 +127,10 @@ public class SwiftyAppirater : NSObject {
     }
 
     @objc func appWillResignActive(_ notification:Notification) {
-        
+        if debug {
+            print("APPIRATER appWillResignActive")
+        }
+        self.hideRatingAlert()
     }
     
     func connectedToNetwork() -> Bool {
