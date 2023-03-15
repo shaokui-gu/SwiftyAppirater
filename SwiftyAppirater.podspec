@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
-  s.name         = "Swiftyirater"
-  s.version      = "0.0.1"
-  s.summary      = "Appirater swift version"
+  s.name         = "SwiftyAppirater"
+  s.version      = "0.0.2"
+  s.summary      = "SwiftyAppirater use swift"
   s.homepage     = "https://github.com/shaokui-gu/Swiftyirater"
   s.license      = 'MIT'
   s.author       = { 'gushaokui' => 'gushaoakui@126.com' }
